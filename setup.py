@@ -42,7 +42,7 @@ def get_extensions():
     this_dir = path.dirname(path.abspath(__file__))
     extensions_dir = path.join(this_dir, "detectron2", "layers", "csrc")
 
-    main_source = path.join(extensions_dir, "vision.cpp")
+    #main_source = path.join(extensions_dir, "vision.cpp")
     sources = glob.glob(path.join(extensions_dir, "**", "*.cpp"))
 
     is_rocm_pytorch = False
@@ -86,7 +86,7 @@ def get_extensions():
             path.join(extensions_dir, "*.cu")
         )
 
-    sources = [main_source] + sources
+    #sources = [main_source] + sources
 
     extension = CppExtension
 
@@ -118,7 +118,7 @@ def get_extensions():
             extra_compile_args["nvcc"].append("-ccbin={}".format(CC))
 
     include_dirs = [extensions_dir]
-
+    
     ext_modules = [
         extension(
             "detectron2._C",
