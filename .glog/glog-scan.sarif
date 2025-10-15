@@ -10,20 +10,7 @@
           "version": "1.0.0",
           "semanticVersion": "1.0.0",
           "informationUri": "https://www.glog.ai",
-          "rules": [
-            {
-              "id": "glog-74e3389b-b36c-48e9-90c2-77f057aa381f",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe `memcpy` function in C++ is used to copy a block of memory from one location to another. This function is vulnerable to buffer overflow attacks if the size of the data being copied is larger than the size of the destination buffer. In the provided code snippet, if the size of `mask` is larger than `cv_mask.data`, it can lead to a buffer overflow.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always ensure that the destination buffer is large enough to hold the data being copied. This can be done by checking the size of the destination buffer and the size of the source data before calling `memcpy`.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```cpp\nsize_t size = 28 * 28 * sizeof(float);\nif (cv_mask.data != NULL && mask != NULL && size <= sizeof(cv_mask.data)) {\n    memcpy(cv_mask.data, mask, size);\n} else {\n    // Handle error\n}\n```\n\nIn this fix, we first calculate the size of the data being copied. Then, we check if `cv_mask.data` and `mask` are not NULL and if `cv_mask.data` is large enough to hold the data. If these conditions are met, we proceed with the `memcpy`. Otherwise, we handle the error appropriately.\n\n## Library Dependencies\n\nThe provided code snippet requires the following library dependencies:\n\n- `<cstring>`: This library provides the `memcpy` function.\n\n## OWASP and CWE Links\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that these links are valid and active at the time of writing this report."
-              },
-              "properties": {
-                "tags": [
-                  "DS121708"
-                ]
-              }
-            }
-          ],
+          "rules": [],
           "language": "en-US",
           "contents": [
             "localizedData",
@@ -33,73 +20,7 @@
         }
       },
       "language": "en-US",
-      "results": [
-        {
-          "ruleId": "glog-74e3389b-b36c-48e9-90c2-77f057aa381f",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Detected Vulnerability in C Function (memcpy)"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tools/deploy/caffe2_mask_rcnn.cpp"
-                },
-                "region": {
-                  "startLine": 115,
-                  "startColumn": 4,
-                  "endLine": 115,
-                  "endColumn": 54,
-                  "charOffset": 3957,
-                  "charLength": 50,
-                  "snippet": {
-                    "text": "memcpy(cv_mask.data, mask, 28 * 28 * sizeof(float)",
-                    "rendered": {
-                      "text": "memcpy(cv_mask.data, mask, 28 * 28 * sizeof(float)",
-                      "markdown": "`memcpy(cv_mask.data, mask, 28 * 28 * sizeof(float)`"
-                    }
-                  },
-                  "sourceLanguage": "cpp"
-                }
-              }
-            }
-          ],
-          "fixes": [
-            {
-              "description": {
-                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
-              },
-              "artifactChanges": [
-                {
-                  "artifactLocation": {
-                    "uri": "tools/deploy/caffe2_mask_rcnn.cpp"
-                  },
-                  "replacements": [
-                    {
-                      "deletedRegion": {
-                        "charOffset": 3957,
-                        "charLength": 50
-                      },
-                      "insertedContent": {
-                        "text": "memcpy_s(cv_mask.data, <size of cv_mask.data>,  mask,  28 * 28 * sizeof(float)"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "properties": {
-            "DevSkimSeverity": "BestPractice",
-            "DevSkimConfidence": "High",
-            "tags": [
-              "API.DangerousAPI.ProblematicFunction"
-            ]
-          }
-        }
-      ],
+      "results": [],
       "newlineSequences": [
         "\r\n",
         "\n"
